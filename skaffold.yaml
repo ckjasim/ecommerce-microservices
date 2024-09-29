@@ -1,0 +1,18 @@
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: ecommerce-app
+build:
+  artifacts:
+    - image: jasimck/ecommerce-user-service
+      context: ./user-service
+    - image: jasimck/ecommerce-product-service
+      context: ./product-service
+    - image: jasimck/ecommerce-cart-service
+      context: ./cart-service
+    - image: jasimck/ecommerce-order-service
+      context: ./order-service
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*.yaml

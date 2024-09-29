@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service
+          image: jasimck/ecommerce-user-service:latest
+          ports:
+            - containerPort: 3000
+          env:  # Add necessary environment variables here
+            - name: KAFKA_CLIENT_ID
+              value: "user-service"  # Ensure this matches the service
+            - name: KAFKA_BROKERS
+              value: "kafka:29092"  # Pointing to your Kafka service in the cluster
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  type: ClusterIP
+  selector:
+    app: user-service
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
