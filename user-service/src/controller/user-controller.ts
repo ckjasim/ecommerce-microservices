@@ -24,11 +24,7 @@ class UserController {
     try {
       const { name, email, password } = req.body;
 
-      const userData = await this.userModel.findOne({ email });
-      if (userData) {
-        return res.status(400).json({ message: "User already exists" });
-      }
-
+      
       const user = await this.userModel.create({ name, email, password });
     
       const token = this.Jwt.generateToken(user._id as string);
